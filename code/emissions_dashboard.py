@@ -142,3 +142,5 @@ def update_dashboard(selected_operator, start_date, end_date):
 # === Run the app ===
 if __name__ == "__main__":
     app.run(debug=True)
+
+server = app.server

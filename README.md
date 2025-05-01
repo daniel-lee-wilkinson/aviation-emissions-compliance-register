@@ -38,6 +38,9 @@ Transparency is essential - especially when simulating environmental impacts. Th
 - SAF blending assumptions: 0-50% (ASTM D7566 standards)
 - Predefined European airport codes and operators
 
+**Sustainable Aviation Fuel (SAF)**
+This simulation includes SAF blending ratios from 0 to 50 percent, following ASTM D7566 standards. Emissions are reduced in direct proportion to the SAF blend percentage. For example, a 40 percent SAF blend results in 40 percent lower direct CO₂ emissions, assuming SAF is carbon-neutral at the point of combustion. Although real SAF types vary in their life-cycle emissions, this linear reduction is a common simplification in early-stage compliance tools.
+
 ---
 
 ## Getting Started

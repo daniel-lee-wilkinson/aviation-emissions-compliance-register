@@ -4,3 +4,4 @@ pandas>=1.5
 plotly>=5.15
 kaleido>=0.2  # required for plotly.write_image
 python-docx>=0.8
+gunicorn

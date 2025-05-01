@@ -1,11 +1,11 @@
-# ✈️ Aviation Emissions Compliance Register
+# Aviation Emissions Compliance Register
 
-## 📌 Overview
-This project simulates and monitors flight-level CO₂ emissions from aviation operators and evaluates their compliance with the EU Emissions Trading System (EU ETS). It enables fast emissions assessments and regulatory checks, even in the absence of real-world datasets, by relying on realistic synthetic data.
+## What is this project about?
+Welcome! This project was built to explore and explain aviation-related climate data through simulation, automation, and transparency. It simulates and monitors flight-level CO₂ emissions from aviation operators and evaluates their compliance with the EU Emissions Trading System (EU ETS). Even without real-world datasets, it enables rapid assessments and visibility into regulatory obligations using realistic synthetic data.
 
 ---
 
-## 🎯 Features
+## Features
 - Generate daily synthetic flight data with emissions and SAF blend levels
 - Assess flight compliance based on EEA routing and operator status
 - Store data in a structured SQLite database
@@ -14,7 +14,8 @@ This project simulates and monitors flight-level CO₂ emissions from aviation o
 - Maintain a growing summary log of emissions data
 
 ---
-## 🧱 Tech Stack
+
+## What is under the hood?
 - **Language**: Python 3
 - **Data & Storage**: pandas, SQLite
 - **Visualizations**: plotly, dash
@@ -24,15 +25,16 @@ This project simulates and monitors flight-level CO₂ emissions from aviation o
 
 ---
 
-## 📊 Data Sources & Assumptions
+## Data Sources & Assumptions
+Transparency is essential - especially when simulating environmental impacts. The assumptions below are clearly declared and traceable through the source code and output reports:
 - Simulated data using real-world aircraft fuel economy (Wikipedia)
-- Standard emission factor: 3.16 kg CO2 per kg Jet A-1 fuel
+- Standard emission factor: 3.16 kg CO₂ per kg Jet A-1 fuel
 - SAF blending assumptions: 0-50% (ASTM D7566 standards)
 - Predefined European airport codes and operators
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Install Requirements
 ```bash
@@ -62,39 +64,49 @@ python code/emissions_dashboard.py
 
 ---
 
-## 📂 Project File Structure
+## Project File Structure
+Below is a typical folder layout, generated during regular operation. It promotes clarity, reproducibility, and auditability:
 ```
-
-📁 code/
-│   ├── emissions_dashboard.py
-│   ├── import_to_sqlite.py
-│   ├── main.py
-│   ├── simulated_flight_emissions.csv
-📁 config/
-│   ├── data_config.json
-│   ├── operators.json
-📁 data/
-│   ├── emissions.db
-├── my_folders.py
-📁 output/
-│   ├── flights_2025-05-01.csv
-│   ├── simulated_flight_emissions.csv
-├── README.md
-📁 reports/
-│   📁 2025-05-01/
-│   │   ├── compliance_pie.png
-│   │   ├── emissions_by_aircraft.png
+aviation-emissions-compliance-register/
+├── code/
+│   ├── main.py                  # Simulates flight data
+│   ├── import_to_sqlite.py     # Imports, reports, visualizes
+│   ├── emissions_dashboard.py  # Dash dashboard
+│   └── config/                 # Static JSON configs
+├── data/
+│   └── emissions.db            # SQLite database
+├── output/
+│   ├── flights_YYYY-MM-DD.csv  # Simulated flight data
+│   └── .imported_files.txt     # Import tracking
+├── reports/
+│   ├── YYYY-MM-DD/             # Daily report folder
 │   │   ├── summary.docx
-│   │   ├── summary_2025-05-01.csv
-│   ├── summary_log.csv
+│   │   ├── summary_YYYY-MM-DD.csv
+│   │   ├── emissions_by_aircraft.png
+│   │   └── compliance_pie.png
+│   └── summary_log.csv         # Rolling summary
 ├── requirements.txt
-├── run_all.py
-
+└── README.md
 ```
 
 ---
 
-## 📈 Outputs
+## Scalability & Transparency
+
+This project is designed to be easily extended, both in terms of functionality and scope:
+
+- **Scalable architecture**: All components are modular - simulation, processing, database storage, and dashboarding - making it easy to plug in new data sources or reporting layers.
+- **Transparent logic**: Emissions calculations, compliance rules, and assumptions are implemented in clearly commented code and reproducible steps. Synthetic data generation is based on published fuel consumption figures, and each transformation step is logged and reportable.
+- **Traceability**: Daily reports are versioned by date and retained as Word, CSV, and visual formats.
+- **Audit-readiness**: Data is persistently stored in SQLite with import timestamps, and all summary statistics are logged to an append-only `summary_log.csv`.
+
+---
+
+## Outputs
+
+![Dashboard Screenshot](emission_airline_dashboard_snippet.png)
+*Example view from the interactive Dash dashboard*
+
 - `summary_YYYY-MM-DD.csv`: Daily KPI export
 - `summary.docx`: Emissions report with charts
 - `summary_log.csv`: Appended daily summary for trend analysis
@@ -102,15 +114,16 @@ python code/emissions_dashboard.py
 
 ---
 
-## 🧩 Future Improvements
+## Future Improvements
 - Integrate real-world API data (Eurocontrol, ICAO)
 - Add emissions offset calculations and cost estimations
 - Deploy the dashboard online (Heroku, Streamlit Cloud)
 - Email or archive daily reports automatically
+- Consider switching to [Polars](https://www.pola.rs/) for faster, scalable data processing when working with large flight logs (Eurocontrol, ICAO)
 
 ---
 
-## 👤 Author
+## About the Author
 Daniel Lee Wilkinson  
 [LinkedIn](https://www.linkedin.com/in/danielleewilkinson/)
 

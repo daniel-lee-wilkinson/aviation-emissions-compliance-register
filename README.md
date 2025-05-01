@@ -115,7 +115,7 @@ This project is designed to be easily extended, both in terms of functionality a
 ## Outputs
 
 ![Dashboard Screenshot](emission_airline_dashboard_snippet.png)
-*Example view from the interactive Dash dashboard*
+*Example view from the interactive Dash dashboard. All data is simulated and does not reflect actual airline performance.*
 
 - `summary_YYYY-MM-DD.csv`: Daily KPI export
 - `summary.docx`: Emissions report with charts

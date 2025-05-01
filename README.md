@@ -1,7 +1,11 @@
-# Aviation Emissions Compliance Register
+# ✈️ Aviation Emissions Compliance Register
 
-## What is this project about?
+## What's this project about?
 Welcome! This project was built to explore and explain aviation-related climate data through simulation, automation, and transparency. It simulates and monitors flight-level CO₂ emissions from aviation operators and evaluates their compliance with the EU Emissions Trading System (EU ETS). Even without real-world datasets, it enables rapid assessments and visibility into regulatory obligations using realistic synthetic data.
+
+This project was developed not only as a technical solution but also as a learning platform - a space to explore sustainable aviation metrics, build scalable tools, and share reproducible insights.
+
+You can explore the live dashboard here: [https://aviation-emissions-compliance-register.onrender.com/](https://aviation-emissions-compliance-register.onrender.com/)
 
 ---
 
@@ -10,18 +14,20 @@ Welcome! This project was built to explore and explain aviation-related climate 
 - Assess flight compliance based on EEA routing and operator status
 - Store data in a structured SQLite database
 - Automatically create Word and CSV reports
-- Visualize emissions and compliance trends
+- Visualise emissions and compliance trends
 - Maintain a growing summary log of emissions data
+- Public interactive dashboard hosted via Render
 
 ---
 
-## What is under the hood?
+## What's under the hood?
 - **Language**: Python 3
 - **Data & Storage**: pandas, SQLite
-- **Visualizations**: plotly, dash
+- **Visualisations**: plotly, dash
 - **Dashboards**: Dash with Bootstrap styling
 - **Reporting**: python-docx
 - **Automation**: argparse, logging
+- **DevOps**: Render (for deployment and hosting)
 
 ---
 
@@ -57,10 +63,12 @@ This runs:
 - `main.py` to simulate flight data
 - `import_to_sqlite.py` to generate and store reports
 
-### 4. Launch Dashboard (Optional)
+### 4. Launch Dashboard Locally (Optional)
 ```bash
 python code/emissions_dashboard.py
 ```
+
+Or view it online: [aviation-emissions-compliance-register.onrender.com](https://aviation-emissions-compliance-register.onrender.com/)
 
 ---
 
@@ -69,8 +77,9 @@ Below is a typical folder layout, generated during regular operation. It promote
 ```
 aviation-emissions-compliance-register/
 ├── code/
+│   ├── __init__.py              # Package marker
 │   ├── main.py                  # Simulates flight data
-│   ├── import_to_sqlite.py     # Imports, reports, visualizes
+│   ├── import_to_sqlite.py     # Imports, reports, visualises
 │   ├── emissions_dashboard.py  # Dash dashboard
 │   └── config/                 # Static JSON configs
 ├── data/
@@ -99,6 +108,7 @@ This project is designed to be easily extended, both in terms of functionality a
 - **Transparent logic**: Emissions calculations, compliance rules, and assumptions are implemented in clearly commented code and reproducible steps. Synthetic data generation is based on published fuel consumption figures, and each transformation step is logged and reportable.
 - **Traceability**: Daily reports are versioned by date and retained as Word, CSV, and visual formats.
 - **Audit-readiness**: Data is persistently stored in SQLite with import timestamps, and all summary statistics are logged to an append-only `summary_log.csv`.
+- **Accessible dashboard**: Hosted on Render at [https://aviation-emissions-compliance-register.onrender.com](https://aviation-emissions-compliance-register.onrender.com) for convenient public access.
 
 ---
 
@@ -117,13 +127,15 @@ This project is designed to be easily extended, both in terms of functionality a
 ## Future Improvements
 - Integrate real-world API data (Eurocontrol, ICAO)
 - Add emissions offset calculations and cost estimations
-- Deploy the dashboard online (Heroku, Streamlit Cloud)
+- Schedule automated deployment and monitoring
 - Email or archive daily reports automatically
-- Consider switching to [Polars](https://www.pola.rs/) for faster, scalable data processing when working with large flight logs (Eurocontrol, ICAO)
+- Switch to [Polars](https://www.pola.rs/) for faster processing on large datasets
+- Improve dashboard interactivity (e.g., maps, airline drilldowns)
+- Add usage logging or access analytics to monitor dashboard reach
 
 ---
 
 ## About the Author
-Daniel Lee Wilkinson  
+Daniel Lee Wilkinson   
 [LinkedIn](https://www.linkedin.com/in/danielleewilkinson/)
 

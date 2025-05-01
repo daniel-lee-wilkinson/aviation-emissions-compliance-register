@@ -1,0 +1,8 @@
+[
+  { "id": "DLH", "name": "Lufthansa" },
+  { "id": "AFR", "name": "Air France" },
+  { "id": "BAW", "name": "British Airways" },
+  { "id": "KLM", "name": "KLM Royal Dutch" },
+  { "id": "EZY", "name": "easyJet" },
+  { "id": "RYR", "name": "Ryanair" }
+]

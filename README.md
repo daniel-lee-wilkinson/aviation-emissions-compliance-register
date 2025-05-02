@@ -110,6 +110,9 @@ aviation-emissions-compliance-register/
 │   │   └── compliance_pie.png
 │   └── summary_log.csv         # Rolling summary
 ├── requirements.txt
+├── .github/
+│   └── workflows/
+│   │   ├── python-ci.yaml
 └── README.md
 ```
 

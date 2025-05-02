@@ -31,6 +31,18 @@ You can explore the live dashboard here: [https://aviation-emissions-compliance-
 
 ---
 
+## CI Integration
+
+This project includes a [GitHub Actions](https://docs.github.com/en/actions) continuous integration workflow that runs on every push and pull request. It:
+
+- Verifies Python syntax using `py_compile`
+- Enforces consistent formatting with [`black`](https://black.readthedocs.io/en/stable/)
+- Installs dependencies from `requirements.txt` to validate environment integrity
+
+The CI pipeline helps ensure code quality and maintainability throughout development.
+
+---
+
 ## Data Sources & Assumptions
 Transparency is essential - especially when simulating environmental impacts. The assumptions below are clearly declared and traceable through the source code and output reports:
 - Simulated data using real-world aircraft fuel economy (Wikipedia)

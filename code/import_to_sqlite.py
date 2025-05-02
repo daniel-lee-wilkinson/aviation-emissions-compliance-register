@@ -9,11 +9,20 @@ from docx.shared import Inches
 import plotly.express as px
 
 # === Set up logging ===
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 # === Parse arguments ===
-parser = argparse.ArgumentParser(description="Import emissions data and generate compliance report.")
-parser.add_argument("--report_date", type=str, default=datetime.now().strftime('%Y-%m-%d'), help="Report date (YYYY-MM-DD)")
+parser = argparse.ArgumentParser(
+    description="Import emissions data and generate compliance report."
+)
+parser.add_argument(
+    "--report_date",
+    type=str,
+    default=datetime.now().strftime("%Y-%m-%d"),
+    help="Report date (YYYY-MM-DD)",
+)
 args = parser.parse_args()
 
 # === Set up paths ===
@@ -34,7 +43,8 @@ cursor = conn.cursor()
 cursor.execute("DROP TABLE IF EXISTS flights")
 
 # === Create table ===
-cursor.execute("""
+cursor.execute(
+    """
 CREATE TABLE IF NOT EXISTS flights (
     flight_id TEXT,
     date TEXT,
@@ -55,10 +65,13 @@ CREATE TABLE IF NOT EXISTS flights (
     offset_required INTEGER,
     imported_at TEXT
 )
-""")
+"""
+)
 
 cursor.execute("CREATE INDEX IF NOT EXISTS idx_flights_date ON flights(date);")
-cursor.execute("CREATE INDEX IF NOT EXISTS idx_operator_name ON flights(operator_name);")
+cursor.execute(
+    "CREATE INDEX IF NOT EXISTS idx_operator_name ON flights(operator_name);"
+)
 cursor.execute("CREATE INDEX IF NOT EXISTS idx_imported_at ON flights(imported_at);")
 
 # === Track previously imported files ===
@@ -77,8 +90,8 @@ for csv_file in csv_files:
 
     logging.info(f"Importing {csv_file.name}")
     df = pd.read_csv(csv_file)
-    df['date'] = pd.to_datetime(df['date']).dt.strftime("%Y-%m-%d")
-    df['imported_at'] = datetime.now().isoformat(timespec='seconds')
+    df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
+    df["imported_at"] = datetime.now().isoformat(timespec="seconds")
     df.to_sql("flights", conn, if_exists="append", index=False)
     imported.add(csv_file.name)
     new_rows += len(df)
@@ -86,7 +99,8 @@ for csv_file in csv_files:
 imported_files_path.write_text("\n".join(imported))
 
 # === Generate summary metrics ===
-df_summary = pd.read_sql_query("""
+df_summary = pd.read_sql_query(
+    """
     SELECT 
         COUNT(*) as total_flights,
         ROUND(SUM(co2_emissions_kg) / 1000.0, 2) as total_emissions_tonnes,
@@ -94,7 +108,9 @@ df_summary = pd.read_sql_query("""
         ROUND(AVG(verified) * 100, 2) as verified_percent,
         ROUND(AVG(operator_compliant) * 100, 2) as compliant_percent
     FROM flights
-""", conn)
+""",
+    conn,
+)
 
 # === Save CSV Summary ===
 df_summary.to_csv(summary_csv_path, index=False)
@@ -111,7 +127,9 @@ if summary_log_path.exists():
         df_log.to_csv(summary_log_path, index=False)
         logging.info(f"📝 Summary appended to {summary_log_path}")
     else:
-        logging.info(f"⚠️ Summary for {args.report_date} already exists in log. Skipping append.")
+        logging.info(
+            f"⚠️ Summary for {args.report_date} already exists in log. Skipping append."
+        )
 else:
     df_summary.to_csv(summary_log_path, index=False)
     logging.info(f"📘 Created new summary log at {summary_log_path}")
@@ -119,18 +137,18 @@ logging.info(f"📊 Summary CSV exported to {summary_csv_path}")
 
 # === Create Word report ===
 report = Document()
-report.add_heading('Emissions Compliance Summary Report', 0)
+report.add_heading("Emissions Compliance Summary Report", 0)
 report.add_paragraph(f"Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 # === Add KPI table ===
 table = report.add_table(rows=1, cols=2)
-table.style = 'Light List Accent 1'
+table.style = "Light List Accent 1"
 hdr = table.rows[0].cells
 hdr[0].text = "Metric"
 hdr[1].text = "Value"
 for col in df_summary.columns:
     row = table.add_row().cells
-    row[0].text = col.replace('_', ' ').title()
+    row[0].text = col.replace("_", " ").title()
     row[1].text = str(df_summary[col][0])
 
 # === Prepare data for plots ===
@@ -148,17 +166,22 @@ daily_report_folder = report_path / args.report_date
 daily_report_folder.mkdir(parents=True, exist_ok=True)
 
 # === Plot 1: Emissions by aircraft ===
-emissions_by_aircraft = df_plot.groupby("aircraft_type")["co2_emissions_kg"].sum().reset_index()
-if not emissions_by_aircraft.empty and emissions_by_aircraft["co2_emissions_kg"].sum() > 0:
+emissions_by_aircraft = (
+    df_plot.groupby("aircraft_type")["co2_emissions_kg"].sum().reset_index()
+)
+if (
+    not emissions_by_aircraft.empty
+    and emissions_by_aircraft["co2_emissions_kg"].sum() > 0
+):
     fig1 = px.bar(
         emissions_by_aircraft,
-        x="aircraft_type", y="co2_emissions_kg",
-        title="CO₂ Emissions by Aircraft Type"
+        x="aircraft_type",
+        y="co2_emissions_kg",
+        title="CO₂ Emissions by Aircraft Type",
     )
 else:
     fig1 = px.bar(
-        x=["No emissions data"], y=[0],
-        title="CO₂ Emissions by Aircraft Type"
+        x=["No emissions data"], y=[0], title="CO₂ Emissions by Aircraft Type"
     )
 fig1_path = daily_report_folder / "emissions_by_aircraft.png"
 try:
@@ -167,20 +190,20 @@ except Exception as e:
     logging.error(f"Failed to save bar plot: {e}")
 
 # === Plot 2: Compliance status ===
-if df_plot['operator_compliant'].nunique() > 1:
+if df_plot["operator_compliant"].nunique() > 1:
     fig2 = px.pie(
         df_plot,
         names="operator_compliant",
         title="Compliance Status Distribution",
         hole=0.4,
-        labels={True: "Compliant", False: "Non-Compliant"}
+        labels={True: "Compliant", False: "Non-Compliant"},
     )
 else:
     fig2 = px.pie(
         names=["Only one category"],
         values=[1],
         title="Compliance Status Distribution",
-        hole=0.4
+        hole=0.4,
     )
 fig2_path = daily_report_folder / "compliance_pie.png"
 try:
@@ -190,15 +213,19 @@ except Exception as e:
 
 # === Insert plots ===
 report.add_heading("Visual Summary", level=1)
-report.add_paragraph("The chart below shows the total CO₂ emissions per aircraft type. "
-                     "This helps identify which aircraft models contribute most to total emissions.")
+report.add_paragraph(
+    "The chart below shows the total CO₂ emissions per aircraft type. "
+    "This helps identify which aircraft models contribute most to total emissions."
+)
 report.add_paragraph("CO₂ Emissions by Aircraft Type")
 report.add_picture(str(fig1_path), width=Inches(5.5))
 
-report.add_paragraph("The following pie chart illustrates the proportion of flights that were deemed compliant "
-                     "under EU Emissions Trading Scheme (EU ETS) criteria. Compliance indicates that the flight's "
-                     "emissions data has been verified and the operator has met regulatory obligations. "
-                     "Non-compliant flights may reflect reporting gaps, verification issues, or allowance shortfalls.")
+report.add_paragraph(
+    "The following pie chart illustrates the proportion of flights that were deemed compliant "
+    "under EU Emissions Trading Scheme (EU ETS) criteria. Compliance indicates that the flight's "
+    "emissions data has been verified and the operator has met regulatory obligations. "
+    "Non-compliant flights may reflect reporting gaps, verification issues, or allowance shortfalls."
+)
 report.add_paragraph("Compliance Status Distribution")
 report.add_picture(str(fig2_path), width=Inches(5.5))
 
